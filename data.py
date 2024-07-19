@@ -1,17 +1,14 @@
-import random
-
-import requests
 from faker import Faker
 
 from locators.main_page_locators import MainPageLocators
 
 fake = Faker()
 
-MAIN_PAGE_REF = 'https://stellarburgers.nomoreparties.site/'
-LOGIN_PAGE_REF = 'https://stellarburgers.nomoreparties.site/login'
-RECOVERY_PASSWORD_REF = 'https://stellarburgers.nomoreparties.site/forgot-password'
-PERSONAL_CABINET_REF = 'https://stellarburgers.nomoreparties.site/account'
-FEED_PAGE_REF = 'https://stellarburgers.nomoreparties.site/feed'
+MAIN_REF = 'https://stellarburgers.nomoreparties.site/'
+LOGIN_PAGE = 'login'
+RECOVERY_PASSWORD_PAGE = 'forgot-password'
+PERSONAL_CABINET_PAGE = 'account'
+FEED_PAGE = 'feed'
 URL_API = 'https://stellarburgers.nomoreparties.site/api'
 REGISTER = '/auth/register'
 LOGIN = '/auth/login'
@@ -24,14 +21,6 @@ payload = {
     "name": fake.name(),
     "password": fake.password()
 }
-
-
-def payload_ing():
-    ingredient_id = []
-    r_ing = requests.get(URL_API + INGREDIENTS)
-    for i in range(len(r_ing.json()['data'])):
-        ingredient_id.append(r_ing.json()['data'][i]['_id'])
-    return {"ingredients": [random.choice(ingredient_id), random.choice(ingredient_id)]}
 
 
 def set_parameter(parameter):

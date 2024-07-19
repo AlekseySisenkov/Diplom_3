@@ -3,17 +3,16 @@ import requests
 from faker import Faker
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
 
-from data import LOGIN_PAGE_REF, RECOVERY_PASSWORD_REF, PERSONAL_CABINET_REF, MAIN_PAGE_REF, payload, URL_API, \
-    REGISTER, USER, ORDERS, payload_ing, FEED_PAGE_REF
+from data import payload, URL_API, REGISTER, USER, ORDERS, MAIN_REF, LOGIN_PAGE, RECOVERY_PASSWORD_PAGE, \
+    PERSONAL_CABINET_PAGE, FEED_PAGE
+from helpers import payload_ing
 from locators.main_page_locators import MainPageLocators
-from locators.personal_cabinet_page_locators import PersonalCabinetPageLocators
 from pages.feed_page import FeedPage
+from pages.login_page import LoginPage
 from pages.main_page import MainPage
 from pages.personal_cabinet_page import PersonalCabinetPage
-from pages.recovery_password_page import LoginPage, RecoveryPasswordPage
+from pages.recovery_password_page import RecoveryPasswordPage
 
 fake = Faker()
 
@@ -30,50 +29,50 @@ def driver():
 
 @pytest.fixture(scope='function')
 def login_page(driver):
-    driver.get(LOGIN_PAGE_REF)
-    return LoginPage(driver)
+    login_page = LoginPage(driver)
+    login_page.go_to_url(MAIN_REF+LOGIN_PAGE)
+    return login_page
 
 
 @pytest.fixture(scope='function')
 def recovery_password_page(driver):
-    driver.get(RECOVERY_PASSWORD_REF)
-    return RecoveryPasswordPage(driver)
+    recovery_password_page = RecoveryPasswordPage(driver)
+    recovery_password_page.go_to_url(MAIN_REF+RECOVERY_PASSWORD_PAGE)
+    return recovery_password_page
 
 
 @pytest.fixture(scope='function')
 def personal_cabinet_page(driver):
-    driver.get(PERSONAL_CABINET_REF)
-    return PersonalCabinetPage(driver)
+    personal_cabinet_page = PersonalCabinetPage(driver)
+    personal_cabinet_page.go_to_url(MAIN_REF+PERSONAL_CABINET_PAGE)
+    return personal_cabinet_page
 
 
 @pytest.fixture(scope='function')
 def main_page(driver):
-    driver.get(MAIN_PAGE_REF)
-    return MainPage(driver)
+    main_page = MainPage(driver)
+    main_page.go_to_url(MAIN_REF)
+    return main_page
 
 
 @pytest.fixture(scope='function')
 def feed_page(driver):
-    driver.get(FEED_PAGE_REF)
-    return FeedPage(driver)
+    feed_page = FeedPage(driver)
+    feed_page.go_to_url(MAIN_REF+FEED_PAGE)
+    return feed_page
 
 
 @pytest.fixture(scope='function')
-def creat_login_delete_user(driver):
+def creat_login_delete_user(main_page):
     payload_data = payload
     r = requests.post(URL_API + REGISTER, data=payload_data)
 
-    driver.get(LOGIN_PAGE_REF)
-    WebDriverWait(driver, 15).until(expected_conditions.presence_of_element_located(PersonalCabinetPageLocators
-                                                                                    .PERSONAL_CABINET))
-    driver.find_element(*PersonalCabinetPageLocators.PERSONAL_CABINET).click()
-    WebDriverWait(driver, 15).until(expected_conditions.presence_of_element_located(MainPageLocators
-                                                                                    .INPUT_EMAIL))
-    driver.find_element(*MainPageLocators.INPUT_EMAIL).send_keys(payload_data['email'])
-    driver.find_element(*MainPageLocators.INPUT_PASSWORD).send_keys(payload_data['password'])
-    driver.find_element(*MainPageLocators.BUTTON_INPUT).click()
-    WebDriverWait(driver, 15).until(expected_conditions.presence_of_element_located(MainPageLocators
-                                                                                    .BUTTON_MAKE_ORDER))
+    main_page.go_to_personal_cabinet()
+    main_page.find_element_with_wait(MainPageLocators.INPUT_EMAIL)
+    main_page.set_text_to_field(MainPageLocators.INPUT_EMAIL, payload_data['email'])
+    main_page.set_text_to_field(MainPageLocators.INPUT_PASSWORD, payload_data['password'])
+    main_page.click_element(MainPageLocators.BUTTON_INPUT)
+    main_page.find_element_with_wait(MainPageLocators.BUTTON_MAKE_ORDER)
 
     yield creat_login_delete_user
     requests.delete(URL_API + USER, headers={'Authorization': r.json()['accessToken']})

@@ -3,7 +3,6 @@ from selenium.webdriver import Keys
 
 from data import set_parameter
 from locators.main_page_locators import MainPageLocators
-from locators.personal_cabinet_page_locators import PersonalCabinetPageLocators
 from pages.base_page import BasePage
 
 
@@ -11,11 +10,7 @@ class MainPage(BasePage):
 
     @allure.step('Переходим по клику на «Личный кабинет»')
     def go_to_personal_cabinet(self):
-        self.click_element(PersonalCabinetPageLocators.PERSONAL_CABINET)
-
-    @allure.step('Проверка перехода по клику на «Личный кабинет»')
-    def check_go_to_personal_cabinet(self):
-        return self.find_element_with_wait(PersonalCabinetPageLocators.HISTORY_ORDERS)
+        self.click_element(MainPageLocators.PERSONAL_CABINET)
 
     @allure.step('Переходим по клику на «Конструктор»')
     def go_to_constructor(self):
@@ -78,3 +73,7 @@ class MainPage(BasePage):
         self.find_element_with_wait(MainPageLocators.WAIT_NUMBER_ORDER)
 
         return self.get_text(MainPageLocators.NUMBER_ORDER)
+
+    @allure.step('Проверка выхода из аккаунта')
+    def check_exit_account(self):
+        return self.find_element_with_wait(MainPageLocators.BUTTON_INPUT)

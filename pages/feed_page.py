@@ -1,7 +1,6 @@
 import allure
 
-from locators.feed_page_locators import FeedPageLocators, HistoryOrdersLocators
-from locators.personal_cabinet_page_locators import PersonalCabinetPageLocators
+from locators.feed_page_locators import FeedPageLocators
 from pages.base_page import BasePage
 
 
@@ -14,22 +13,9 @@ class FeedPage(BasePage):
     def check_open_window_details_order(self):
         return self.find_element_with_wait(FeedPageLocators.BUTTON_CLOSE_DETAILS_ORDER)
 
-    @allure.step('Переходим в раздел «История заказов»')
-    def go_to_history_orders(self):
-        self.click_element(PersonalCabinetPageLocators.PERSONAL_CABINET)
-        self.click_element(PersonalCabinetPageLocators.HISTORY_ORDERS)
-
-    @allure.step('Берем номер заказа из раздела «История заказов»')
-    def make_list_history_orders(self):
-
-        return self.get_text(HistoryOrdersLocators.NUM_ORDERS)
-
     @allure.step('Проверяем отображение на странице «Лента заказов» заказов пользователя из раздела «История заказов»')
     def check_visible_history_orders(self):
-        if self.make_list_history_orders() in self.get_text(FeedPageLocators.LIST_ORDERS):
-            return True
-        else:
-            return False
+        return self.get_text(FeedPageLocators.LIST_ORDERS)
 
     @allure.step('Сохраняем счетчик «Выполнено за все время»')
     def save_count_done_all_time_orders(self):

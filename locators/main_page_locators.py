@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 
 
 class MainPageLocators:
+    PERSONAL_CABINET = By.XPATH, '//p[text()="Личный Кабинет"]'
     BUTTON_CONSTRUCTOR = By.XPATH, '//p[text()="Конструктор"]'
     BUTTON_ORDERS_FEED = By.XPATH, '//p[text()="Лента Заказов"]'
     BUTTON_INGREDIENT_WINDOW_CLOSE = By.XPATH, ('//section[@class="Modal_modal_opened__3ISw4 '

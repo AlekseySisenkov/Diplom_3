@@ -11,7 +11,3 @@ class FeedPageLocators:
     DONE_TODAY_ORDERS = By.XPATH, ('//p[text()="Выполнено за сегодня:"]/parent::div/p[@class="OrderFeed_number__2MbrQ '
                                    'text text_type_digits-large"]')
     NUMBER_IN_WORK = By.XPATH, '//ul[@class="OrderFeed_orderListReady__1YFem OrderFeed_orderList__cBvyi"]/li'
-
-
-class HistoryOrdersLocators:
-    NUM_ORDERS = By.XPATH, '//div[@class="OrderHistory_textBox__3lgbs mb-6"]/p[@class="text text_type_digits-default"]'

@@ -10,6 +10,10 @@ class BasePage:
     def __init__(self, driver):
         self.driver = driver
 
+    @allure.step('Переход по ссылке')
+    def go_to_url(self, url):
+        self.driver.get(url)
+
     @allure.step('Поиск элемента с ожиданием')
     def find_element_with_wait(self, locator):
         WebDriverWait(self.driver, 15).until(expected_conditions.presence_of_element_located(locator))
@@ -18,7 +22,7 @@ class BasePage:
     @allure.step('Прокрутка до элемента')
     def skrooll_to_element(self, locator):
         self.driver.execute_script("arguments[0].scrollIntoView();", self.find_element_with_wait(locator))
-        WebDriverWait(self.driver, 15).until(expected_conditions.presence_of_element_located(locator))
+        self.find_element_with_wait(locator)
 
     @allure.step('Нажатие на элемент')
     def click_element(self, locator):
@@ -31,18 +35,6 @@ class BasePage:
     @allure.step('Ввод текста в поле')
     def set_text_to_field(self, locator, text):
         self.find_element_with_wait(locator).send_keys(text)
-
-    @allure.step('Создание пользователя')
-    def creat_user(self, ref, data):
-        return requests.post(ref, data=data)
-
-    @allure.step('Авторизация пользователя')
-    def login_user(self, ref, data):
-        return requests.post(ref, data=data, timeout=10)
-
-    @allure.step('Удаление пользователя')
-    def delete_user(self, ref, token):
-        requests.delete(ref, headers={'Authorization': token})
 
     @staticmethod
     @allure.step('Добавление номера в метку')
